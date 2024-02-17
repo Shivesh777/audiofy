@@ -45,47 +45,6 @@ if my_upload is not None:
 else:
     fix_image("./zebra.jpg")
 
-def set_background():
-    # Add HTML and CSS to set a video as background
-    html_code = """
-    <style>
-    body {
-        background-color: #f0f2f6; /* Set a background color */
-    }
-
-    .bg-video {
-        position: fixed;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        left: 0;
-        overflow: hidden;
-        z-index: -1;
-        width: 100%;
-        height: 100%;
-    }
-
-    #video-background {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        min-width: 100%;
-        min-height: 100%;
-        width: auto;
-        height: auto;
-        z-index: -100;
-    }
-    </style>
-    <div class="bg-video">
-        <video id="video-background" autoplay loop muted>
-            <source src="your_video_path.mp4" type="video/mp4"> <!-- Replace "your_video_path.mp4" with your video file path -->
-            Your browser does not support the video tag.
-        </video>
-    </div>
-    """
-    st.markdown(html_code, unsafe_allow_html=True)
-
 def main():
     set_background()
 
