@@ -74,9 +74,9 @@ def download_audio_section():
     st.write("## Download WAV File")
     st.write("Click the button below to download your WAV file.")
 
-    wav_file_path = "dog.wav"
-    # Download button
-    st.markdown(get_wav_download_link(wav_file_path), unsafe_allow_html=True)
+    with open("StarWars60.wav", "rb") as f:
+        data = f.read()
+    st.download_button('Download story as mp3 file', data, 'StarWars60.wav')
 
 if __name__ == "__main__":
     main()
