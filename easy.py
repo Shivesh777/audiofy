@@ -4,53 +4,80 @@ from PIL import Image
 from io import BytesIO
 import base64
 
+# Set page configuration
 st.set_page_config(layout="wide", page_title="Image Background Remover")
 
-st.write("## Remove background from your image")
-st.write(
-    ":dog: Try uploading an image to watch the background magically removed. Full quality images can be downloaded from the sidebar. This code is open source and available [here](https://github.com/tyler-simons/BackgroundRemoval) on GitHub. Special thanks to the [rembg library](https://github.com/danielgatis/rembg) :grin:"
-)
-st.sidebar.write("## Upload and download :gear:")
+# Define the background image
+background_image = "background.jpg"  # Provide the path to your background image
 
-MAX_FILE_SIZE = 5 * 1024 * 1024  # 5MB
+# Set page background
+page_bg_img = '''
+<style>
+body {
+background-image: url("https://example.com/background.jpg");
+background-size: cover;
+}
+</style>
+'''
 
-# Download the fixed image
-def convert_image(img):
-    buf = BytesIO()
-    img.save(buf, format="PNG")
-    byte_im = buf.getvalue()
-    return byte_im
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
+# Function to remove background from image
+def remove_background(image):
+    return remove(image)
 
-def fix_image(upload):
-    image = Image.open(upload)
-    col1.write("Original Image :camera:")
-    col1.image(image)
+# Function to convert image to byte stream
+def convert_image_to_bytes(image):
+    img_buffer = BytesIO()
+    image.save(img_buffer, format="PNG")
+    return img_buffer.getvalue()
 
-    fixed = remove(image)
-    col2.write("Fixed Image :wrench:")
-    col2.image(fixed)
-    st.sidebar.markdown("\n")
-    st.sidebar.download_button("Download fixed image", convert_image(fixed), "fixed.png", "image/png")
-
-
-col1, col2 = st.columns(2)
-my_upload = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
-
-if my_upload is not None:
-    if my_upload.size > MAX_FILE_SIZE:
-        st.error("The uploaded file is too large. Please upload an image smaller than 5MB.")
-    else:
-        fix_image(upload=my_upload)
-else:
-    fix_image("./zebra.jpg")
-
+# Main function to run the app
 def main():
-    set_background()
+    # Buttons to switch between sections
+    st.sidebar.write("")
+    st.sidebar.write("")
+    section = st.sidebar.radio("", ('Upload Image', 'Download Image'), index=0)
 
-    # Your Streamlit app content here
-    st.title("Streamlit App with Custom Video Background")
-    st.write("This is your Streamlit app content.")
+    if section == 'Upload Image':
+        upload_image_section()
+    elif section == 'Download Image':
+        download_image_section()
+
+# Section to upload image and remove background
+def upload_image_section():
+    st.write("## Remove background from your image")
+    st.write(":dog: Try uploading an image to watch the background magically removed.")
+
+    # Sidebar
+    uploaded_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
+
+    if uploaded_file is not None:
+        image = Image.open(uploaded_file)
+        st.image(image, caption="Original Image", use_column_width=True)
+
+        if st.button("Remove Background"):
+            with st.spinner('Removing background...'):
+                fixed_image = remove_background(image)
+            st.image(fixed_image, caption="Background Removed", use_column_width=True)
+
+            # Download button
+            st.markdown(get_image_download_link(fixed_image), unsafe_allow_html=True)
+
+# Section to download fixed image
+def download_image_section():
+    st.write("## Download Fixed Image")
+    st.write(":arrow_down: Click the button below to download the fixed image.")
+
+    # Download button
+    st.markdown(get_image_download_link(fixed_image), unsafe_allow_html=True)
+
+# Function to get download link for image
+def get_image_download_link(image):
+    buffered = convert_image_to_bytes(image)
+    b64 = base64.b64encode(buffered).decode()
+    href = f'<a href="data:file/png;base64,{b64}" download="fixed_image.png">Download fixed image</a>'
+    return href
 
 if __name__ == "__main__":
     main()
