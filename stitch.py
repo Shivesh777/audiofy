@@ -19,7 +19,6 @@ def stitch(audio_files, coordinates, room_dimensions, output_path):
     - The function assumes all audio files have the same sampling rate.
     - The listener's position (receiver) is set at the center of the room's ground level.
     - The simulated spatial audio is saved to the specified output path.
-    - If an error occurs during simulation, an error message is printed.
 
     """
     # Room parameters
