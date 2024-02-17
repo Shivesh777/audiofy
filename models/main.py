@@ -136,7 +136,7 @@ def stitch(audio_files, coordinates, room_dimensions, output_path):
     subprocess.run(ffmpeg_command)
 
 
-def infer(image_path, output_path, prompt):
+def infer(sam, model, codi, image_path, output_path, prompt):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     transform = Compose(
@@ -158,7 +158,8 @@ def infer(image_path, output_path, prompt):
     image = cv2.imread(image_path)
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
 
-    sam = load_segmentation_model()
+    if sam is None:
+        sam = load_segmentation_model()
     mask_generator = SamAutomaticMaskGenerator(sam)
     masks = mask_generator.generate(image)
     masks = sorted(masks, key=lambda x: x["area"], reverse=True)[:3]
@@ -179,7 +180,8 @@ def infer(image_path, output_path, prompt):
             )
         )
 
-    model = load_depth_model()
+    if model is None:
+        model = load_depth_model()
     h, w = image.shape[:2]
     image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB) / 255.0
     image = transform({"image": image})["image"]
@@ -193,7 +195,8 @@ def infer(image_path, output_path, prompt):
     raw_depth.save(tmp.name)
     depth = (depth - depth.min()) / (depth.max() - depth.min()) * 255.0
 
-    codi = load_image2audio_model()
+    if codi is None:
+        codi = load_image2audio_model()
     audio = []
     for object in masked:
         if prompt == "" or prompt is None:
