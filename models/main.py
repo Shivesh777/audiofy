@@ -196,14 +196,24 @@ def infer(image_path, output_path, prompt):
     codi = load_image2audio_model()
     audio = []
     for object in masked:
-        audio_wave = codi.inference(
-            xtype=["audio"],
-            condition=[crop_and_fill(object, cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)), prompt],
-            condition_types=["image", "text"],
-            scale=7.5,
-            n_samples=1,
-            ddim_steps=500,
-        )[0]
+        if prompt == "" or prompt is None:
+            audio_wave = codi.inference(
+                xtype=["audio"],
+                condition=[crop_and_fill(object, cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB))],
+                condition_types=["image"],
+                scale=7.5,
+                n_samples=1,
+                ddim_steps=500,
+            )[0]
+        else:
+            audio_wave = codi.inference(
+                xtype=["audio"],
+                condition=[crop_and_fill(object, cv2.cvtColor(cv2.imread(image_path), cv2.COLOR_BGR2RGB)), prompt],
+                condition_types=["image", "text"],
+                scale=7.5,
+                n_samples=1,
+                ddim_steps=500,
+            )[0]
         audio.append(audio_wave)
     
     depth  = ((-1 * (depth - 255.0))*(.5*w/255.)).detach().cpu().numpy()
@@ -212,5 +222,3 @@ def infer(image_path, output_path, prompt):
     points = np.hstack((points, depth_values.reshape(-1, 1)))
     
     stitch(audio, points, [w, h , .5*w], output_path)
-
-infer("images/animals.jpg", "output.wav", "a deer and eagle in a field")
