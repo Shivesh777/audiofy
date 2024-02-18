@@ -126,7 +126,7 @@ def stitch(audio_files, coordinates, room_dimensions, output_path):
         gen_audio(audio_files, coordinates, room_dimensions, mic_coord, f"speaker_{i}.wav")
 
     ffmpeg_command = [
-        "ffmpeg", "-i", "speaker_0.wav", "-i", "speaker_1.wav",
+        "ffmpeg", "-y", "-i", "speaker_0.wav", "-i", "speaker_1.wav",
         "-i", "speaker_2.wav", "-i", "speaker_3.wav",
         "-i", "speaker_4.wav", "-i", "speaker_5.wav",
         "-filter_complex", "[0:a][1:a][2:a][3:a][4:a][5:a]join=inputs=6:channel_layout=5.1:map=0.0-FL|1.0-FR|2.0-FC|3.0-LFE|4.0-BL|5.0-BR[a]; [a]volume=10.0[out]",
