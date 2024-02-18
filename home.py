@@ -54,9 +54,9 @@ def load_segmentation():
         st.session_state["segmentation"] = load_segmentation_model()
     return st.session_state["segmentation"]
 
-image2audio = load_image2audio()
-depth = load_depth()
-segmentation = load_segmentation()
+#image2audio = load_image2audio()
+#depth = load_depth()
+#segmentation = load_segmentation()
 
 
 # Function to convert image to byte stream
@@ -81,16 +81,18 @@ def main():
 
     if section == 'Upload Image':
         upload_image_section()
-    elif section == 'Download Audio':
         download_audio_section()
 
 # Section to upload image and remove background
 def upload_image_section():
     st.write("## Audiofy")
-    st.write(":dog: Try uploading an image to hear the sound it in the picture")
+    st.write(":sound: Try uploading an image to hear the sound it in the picture")
     st.write ("Step into the world of Audiofy, where images transform into vibrant soundscapes! Our innovative platform marries cutting-edge image processing with advanced deep learning techniques to craft immersive Dolby 5.1 surround sound clips like never before.\
                  Experience the Magic: Picture this : upload an image of your choice alongside a captivating text prompt, and watch as Audiofy works its magic. Our intricate blend of traditional image processing and state-of-the-art diffusion models seamlessly weaves together visuals and audio, creating a symphony for your senses.\
                 Delve into the heart of Audiofy creative process! Witness the power of ViT models as they meticulously segment images, while encoder-only and transformer VAEs bring textual elements to life. Inspired by CoDi, our audio diffuser crafts spatial soundscapes that transport you to another dimension.")
+    st.write("For example:")
+    st.image('dog.jpg',width=300)
+
     # Sidebar
     uploaded_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
