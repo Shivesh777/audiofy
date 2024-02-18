@@ -3,7 +3,7 @@ from PIL import Image
 from io import BytesIO
 import base64
 import sys
-from models.main import *
+from main import *
 
 # Set page configuration
 st.set_page_config(layout="wide", page_title="Audiofy")
@@ -80,8 +80,6 @@ def main():
 
     if section == 'Upload Image':
         upload_image_section()
-        prompt = st.text_input("", placeholder="Input text prompt here")
-        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
     elif section == 'Download Audio':
         download_audio_section()
 
@@ -97,6 +95,8 @@ def upload_image_section():
         image = Image.open(uploaded_file)
         image.save("try.jpg")
         st.image(image, caption="Original Image", use_column_width=True)
+        prompt = st.text_input("", placeholder="Input text prompt here")
+        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
 
 
 # Section to download audio

@@ -163,3 +163,15 @@ models/checkpoints/CoDi_audio_diffuser_m.pth
 models/checkpoints/CoDi_encoders.pth
 models/checkpoints/CoDi_text_diffuser.pth
 models/checkpoints/CoDi_video_diffuser_8frames.pth
+sam_vit_h_4b8939.pth
+out.wav
+speaker_0.wav
+speaker_1.wav
+speaker_2.wav
+speaker_3.wav
+speaker_4.wav
+speaker_5.wav
+checkpoints/CoDi_audio_diffuser_m.pth
+checkpoints/CoDi_encoders.pth
+checkpoints/CoDi_text_diffuser.pth
+checkpoints/CoDi_video_diffuser_8frames.pth

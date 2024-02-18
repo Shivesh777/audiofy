@@ -19,8 +19,6 @@ from scipy.io import wavfile
 import pyroomacoustics as pra
 import sys
 
-sys.path.append('.')
-
 def crop_and_fill(image_array, fill_image):
     non_zero_mask = np.any(image_array > 0, axis=-1)
     rows_nonzero, cols_nonzero = np.nonzero(non_zero_mask)
