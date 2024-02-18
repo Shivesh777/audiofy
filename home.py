@@ -96,7 +96,8 @@ def upload_image_section():
         image.save("try.jpg")
         st.image(image, caption="Original Image", use_column_width=True)
         prompt = st.text_input("", placeholder="Input text prompt here")
-        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
+        if st.button("Generate Audio"):
+            infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
 
 
 # Section to download audio
