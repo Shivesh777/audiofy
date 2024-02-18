@@ -1,0 +1,20 @@
+streamlit
+opencv-python-headless
+matplotlib
+numpy
+torch
+torchvision
+torchaudio
+segment_anything @ git+https://github.com/facebookresearch/segment-anything
+scipy
+pyroomacoustics
+diffusers
+transformers
+contourpy
+huggingface-hub
+librosa
+lightning-utilities
+numba
+pytorch-lightning
+torchlibrosa
+torchmetrics
