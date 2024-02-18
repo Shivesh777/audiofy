@@ -83,11 +83,6 @@ def main():
         upload_image_section()
     elif section == 'Download Audio':
         download_audio_section()
-    
-# Function to resize the image
-def resize_image(image, max_size=(800, 600)):
-    image.thumbnail(max_size, Image.ANTIALIAS)
-    return image
 
 # Section to upload image and remove background
 def upload_image_section():
@@ -101,9 +96,8 @@ def upload_image_section():
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
-        image = resize_image(image)  # Resize the image
         image.save("try.jpg")
-        st.image(image, caption="Original Image", use_column_width=True)
+        st.image(image, width=450)
         prompt = st.text_input("", placeholder="Input text prompt here")
         if st.button("Generate Audio"):
             infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
