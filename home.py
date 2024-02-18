@@ -1,8 +1,11 @@
 import streamlit as st
-from rembg import remove
 from PIL import Image
 from io import BytesIO
 import base64
+import sys
+from models.main import *
+
+ssys.path.append('models/') 
 
 # Set page configuration
 st.set_page_config(layout="wide", page_title="Audiofy")
@@ -38,9 +41,24 @@ video_html = """
 
 st.markdown(video_html, unsafe_allow_html=True)
 
-# Function to remove background from image
-def remove_background(image):
-    return remove(image)
+def load_image2audio():
+    if "image2audio" not in st.session_state:
+        st.session_state["image2audio"] = load_image2audio_model()
+    return st.session_state["image2audio"]
+
+def load_depth():
+    if "depth" not in st.session_state:
+        st.session_state["depth"] = load_depth_model()
+    return st.session_state["depth"]
+
+def load_segmentation():
+    if "segmentation" not in st.session_state:
+        st.session_state["segmentation"] = load_segmentation_model()
+    return st.session_state["segmentation"]
+
+image2audio = load_image2audio()
+depth = load_depth()
+segmentation = load_segmentation()
 
 # Function to convert image to byte stream
 def convert_image_to_bytes(image):
@@ -64,6 +82,8 @@ def main():
 
     if section == 'Upload Image':
         upload_image_section()
+        prompt = st.text_input("", placeholder="Input text prompt here")
+        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
     elif section == 'Download Audio':
         download_audio_section()
 
@@ -77,19 +97,16 @@ def upload_image_section():
 
     if uploaded_file is not None:
         image = Image.open(uploaded_file)
+        image.save("try.jpg")
         st.image(image, caption="Original Image", use_column_width=True)
 
-        if st.button("Remove Background"):
-            with st.spinner('Removing background...'):
-                fixed_image = remove_background(image)
-            st.image(fixed_image, caption="Background Removed", use_column_width=True)
 
 # Section to download audio
 def download_audio_section():
     st.write("## Download WAV audio File")
     st.write("Click the button below to download your WAV audio file.")
 
-    wav_file_path = "dog.wav"
+    wav_file_path = "out.wav"
     # Download button
     st.markdown(get_wav_download_link(wav_file_path), unsafe_allow_html=True)
 
