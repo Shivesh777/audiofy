@@ -81,6 +81,7 @@ def main():
 
     if section == 'Upload Image':
         upload_image_section()
+    elif section == 'Download Audio':
         download_audio_section()
 
 # Section to upload image and remove background
