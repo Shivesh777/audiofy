@@ -70,7 +70,7 @@ def get_wav_download_link(wav_file_path):
     with open(wav_file_path, "rb") as file:
         wav_file_data = file.read()
     b64 = base64.b64encode(wav_file_data).decode()
-    href = f'<a href="data:audio/wav;base64,{b64}" download="audio.wav">Download WAV file</a>'
+    href = f'<a href="data:audio/wav;base64,{b64}" download="audio.wav">Download generated audio</a>'
     return href
 
 # Main function to run the app
@@ -100,14 +100,14 @@ def upload_image_section():
     uploaded_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
     if uploaded_file is not None:
-    image = Image.open(uploaded_file)
-    image = resize_image(image)  # Resize the image
-    image.save("try.jpg")
-    st.image(image, caption="Original Image", use_column_width=True)
-    prompt = st.text_input("", placeholder="Input text prompt here")
-    if st.button("Generate Audio"):
-        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
-        st.audio("out.wav", "out.wav")
+        image = Image.open(uploaded_file)
+        image = resize_image(image)  # Resize the image
+        image.save("try.jpg")
+        st.image(image, caption="Original Image", use_column_width=True)
+        prompt = st.text_input("", placeholder="Input text prompt here")
+        if st.button("Generate Audio"):
+            infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
+            st.audio("out.wav", "out.wav")
 
 
 # Section to download audio
