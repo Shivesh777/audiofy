@@ -58,6 +58,7 @@ image2audio = load_image2audio()
 depth = load_depth()
 segmentation = load_segmentation()
 
+
 # Function to convert image to byte stream
 def convert_image_to_bytes(image):
     img_buffer = BytesIO()
@@ -82,22 +83,31 @@ def main():
         upload_image_section()
     elif section == 'Download Audio':
         download_audio_section()
+    
+# Function to resize the image
+def resize_image(image, max_size=(800, 600)):
+    image.thumbnail(max_size, Image.ANTIALIAS)
+    return image
 
 # Section to upload image and remove background
 def upload_image_section():
     st.write("## Audiofy")
     st.write(":dog: Try uploading an image to hear the sound it in the picture")
-
+    st.write ("Step into the world of Audiofy, where images transform into vibrant soundscapes! Our innovative platform marries cutting-edge image processing with advanced deep learning techniques to craft immersive Dolby 5.1 surround sound clips like never before.\
+                 Experience the Magic: Picture this : upload an image of your choice alongside a captivating text prompt, and watch as Audiofy works its magic. Our intricate blend of traditional image processing and state-of-the-art diffusion models seamlessly weaves together visuals and audio, creating a symphony for your senses.\
+                Delve into the heart of Audiofy creative process! Witness the power of ViT models as they meticulously segment images, while encoder-only and transformer VAEs bring textual elements to life. Inspired by CoDi, our audio diffuser crafts spatial soundscapes that transport you to another dimension.")
     # Sidebar
     uploaded_file = st.sidebar.file_uploader("Upload an image", type=["png", "jpg", "jpeg"])
 
     if uploaded_file is not None:
-        image = Image.open(uploaded_file)
-        image.save("try.jpg")
-        st.image(image, caption="Original Image", use_column_width=True)
-        prompt = st.text_input("", placeholder="Input text prompt here")
-        if st.button("Generate Audio"):
-            infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
+    image = Image.open(uploaded_file)
+    image = resize_image(image)  # Resize the image
+    image.save("try.jpg")
+    st.image(image, caption="Original Image", use_column_width=True)
+    prompt = st.text_input("", placeholder="Input text prompt here")
+    if st.button("Generate Audio"):
+        infer(segmentation, depth, image2audio, "try.jpg", "out.wav", prompt)
+        st.audio("out.wav", "out.wav")
 
 
 # Section to download audio
@@ -108,6 +118,7 @@ def download_audio_section():
     wav_file_path = "out.wav"
     # Download button
     st.markdown(get_wav_download_link(wav_file_path), unsafe_allow_html=True)
+
 
 if __name__ == "__main__":
     main()

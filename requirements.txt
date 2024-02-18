@@ -18,3 +18,4 @@ numba
 pytorch-lightning
 torchlibrosa
 torchmetrics
+einops
