@@ -5,8 +5,6 @@ import base64
 import sys
 from models.main import *
 
-ssys.path.append('models/') 
-
 # Set page configuration
 st.set_page_config(layout="wide", page_title="Audiofy")
 

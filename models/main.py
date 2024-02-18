@@ -13,11 +13,13 @@ from depth_anything.util.transform import NormalizeImage, PrepareForNet, Resize
 from PIL import Image
 from segment_anything import SamAutomaticMaskGenerator, sam_model_registry
 from torchvision.transforms import Compose
-from transformers import AutoImageProcessor, AutoModelForDepthEstimation
 import subprocess
 
 from scipy.io import wavfile
 import pyroomacoustics as pra
+import sys
+
+sys.path.append('.')
 
 def crop_and_fill(image_array, fill_image):
     non_zero_mask = np.any(image_array > 0, axis=-1)
